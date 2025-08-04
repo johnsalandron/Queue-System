@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DPWH - Ticket</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #f9f9f9;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+        }
+
+        h1 {
+            color: #0041c2;
+            font-weight: 700;
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 2rem;
+            color: #444;
+            margin-bottom: 40px;
+        }
+
+        .ticket-box {
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 60px 50px 100px;
+            /* Extra bottom padding */
+            text-align: center;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .ticket-box h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .ticket-number {
+            font-size: 7.2rem;
+            font-weight: 700;
+            color: #0041c2;
+            margin-bottom: 30px;
+        }
+
+        .footer-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.1rem;
+            color: #666;
+            position: absolute;
+            bottom: 30px;
+            left: 50px;
+            right: 50px;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 30px;
+        }
+
+        .btn {
+            padding: 25px 50px;
+            border: none;
+            border-radius: 14px;
+            font-size: 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-blue {
+            background-color: #0041c2;
+            color: white;
+        }
+
+        .btn-blue:hover {
+            background-color: #0031a0;
+        }
+
+        .btn-red {
+            background-color: #da471f;
+            color: white;
+        }
+
+        .btn-red:hover {
+            background-color: #da471f;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 30px;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            p {
+                font-size: 1.5rem;
+            }
+
+            .ticket-box {
+                padding: 40px 30px 80px;
+            }
+
+            .ticket-box h2 {
+                font-size: 1.8rem;
+            }
+
+            .ticket-number {
+                font-size: 5rem;
+            }
+
+            .footer-row {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+                font-size: 0.9rem;
+                left: 20px;
+                right: 20px;
+                bottom: 20px;
+            }
+
+            .btn {
+                font-size: 1.5rem;
+                padding: 18px 30px;
+            }
+
+            .button-row {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .button-row button {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            .ticket-box,
+            .ticket-box * {
+                visibility: visible;
+            }
+
+            .ticket-box {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            .ticket-number {
+                font-size: 100px;
+                margin: 50px 0;
+            }
+
+            .footer-row {
+                font-size: 16px;
+                justify-content: space-between;
+                padding: 0 40px;
+                margin-top: 50px;
+            }
+        }
+    </style>
+
+    </style>
+</head>
+
+<body>
+
+    <h1>Get Ticket</h1>
+    <p>Your Number Is</p>
+
+    <div class="ticket-box">
+        <h2>Transaction Number</h2>
+        <div class="ticket-number" id="ticketNumber">Loading...</div>
+        <div class="footer-row">
+            <span>Please Wait until your number is called</span>
+
+            <span id="ticketDate">--</span>
+        </div>
+    </div>
+
+    <div class="button-row">
+        <button class="btn btn-blue" onclick="window.location.href='index.html'">Next Queue Number</button>
+        <button class="btn btn-red" onclick="triggerPrint()">Print Out</button>
+
+    </div>
+
+
+    <!-- Replace everything inside <script> tags at the bottom of your file with this -->
+    <script src="js/ticket.js"></script>
+    <script src="js/qz-tray.js"></script>
+
+    <script>
+        // Load certificate and private key
+        qz.security.setCertificatePromise(async function () {
+            const res = await fetch("digital-certificate.txt");
+            return await res.text();
+        });
+
+        qz.security.setSignaturePromise(async function (toSign) {
+            const res = await fetch("private-key.pem");
+            const keyText = await res.text();
+            const privateKey = await window.crypto.subtle.importKey(
+                "pkcs8",
+                str2ab(atob(keyText.replace(/-----.*?-----/g, "").replace(/\s+/g, ""))),
+                { name: "RSASSA-PKCS1-v1_5", hash: "SHA-1" },
+                false,
+                ["sign"]
+            );
+            const signature = await window.crypto.subtle.sign("RSASSA-PKCS1-v1_5", privateKey, new TextEncoder().encode(toSign));
+            return btoa(String.fromCharCode(...new Uint8Array(signature)));
+        });
+
+        function str2ab(str) {
+            const buf = new ArrayBuffer(str.length);
+            const bufView = new Uint8Array(buf);
+            for (let i = 0; i < str.length; i++) {
+                bufView[i] = str.charCodeAt(i);
+            }
+            return buf;
+        }
+
+        async function triggerPrint() {
+            if (!qz.websocket.isActive()) {
+                try {
+                    await qz.websocket.connect();
+                    console.log("Connected to QZ Tray");
+                } catch (e) {
+                    alert("Failed to connect to QZ Tray.");
+                    console.error(e);
+                    return;
+                }
+            }
+
+            const config = qz.configs.create("POS-80");
+
+            const ticketBox = document.querySelector(".ticket-box").cloneNode(true);
+
+            const style = `
+            <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+      }
+      .ticket-box {
+        width: 100%;
+        padding: 30px 20px;
+        text-align: center;
+      }
+      .ticket-box h2 {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 25px;
+      }
+      .ticket-number {
+        font-size: 60px;
+        font-weight: 700;
+        color: #0041c2;
+        margin-bottom: 40px;
+      }
+      .footer-row {
+        font-size: 09px;
+        display: flex;
+        justify-content: space-between;
+        color: #666;
+        padding: 0 10px;
+      }
+    </style>
+        `;
+
+            const htmlContent = `
+            <html>
+                <head>${style}</head>
+                <body>${ticketBox.outerHTML}</body>
+            </html>
+        `;
+
+            const data = [{
+                type: 'html',
+                format: 'plain',
+                data: htmlContent
+            }];
+
+            qz.print(config, data).then(() => {
+                console.log("Printed successfully");
+            }).catch(err => {
+                console.error("Print failed:", err);
+                alert("Print failed. Check QZ Tray and printer.");
+            });
+        }
+    </script>
+
+</body>
+
+</html>

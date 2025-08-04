@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DPWH Transaction Selector</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            background-color: #ffffff;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding: 90px;
+            padding-left: 150px;
+            padding-right: 150px;
+            width: 100%;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 60px;
+            width: 100%;
+        }
+
+        .top-bar h2 {
+            font-size: 2.5rem;
+            color: #002060;
+            text-align: left;
+        }
+
+        .logo-container img {
+            width: 200px;
+            height: auto;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 50px;
+            width: 100%;
+        }
+
+        .btn {
+            padding: 60px 30px;
+            font-size: 2rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            color: white;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+
+        .btn-red {
+            width: 206%;
+        }
+
+        .btn-blue {
+            background-color: #0046ad;
+        }
+
+        .btn-blue:hover {
+            background-color: #024ab8;
+        }
+
+        .btn-red {
+            background-color: #da471f;
+        }
+
+        .btn:hover {
+            transform: scale(1.01);
+        }
+
+        .footer {
+            text-align: center;
+            color: #002060;
+            font-weight: 600;
+            font-size: 3rem;
+            margin-top: auto;
+            padding-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .button-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                font-size: 1.6rem;
+                padding: 45px 25px;
+                border-radius: 18px;
+            }
+
+            .footer {
+                font-size: 1.4rem;
+                padding-top: 30px;
+            }
+
+            .logo-container {
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="top-bar">
+            <h2>Please select a device<br>to use in this vendo</h2>
+            <div class="logo-container">
+                <img src="logo.jpg" alt="LAP Logo" />
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="button-grid">
+                <button class="btn btn-blue" onclick="window.location.href='kiosk.html'">Ticket Kiosk</button>
+                <button class="btn btn-blue" onclick="window.location.href='cashier-page.html'">Cashier Page</button>
+                <button class="btn btn-red" onclick="window.location.href='tv.html'">TV Display</button>
+            </div>
+            <div class="footer">
+                For inquiries, Please contact LAP IT Solutions.
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

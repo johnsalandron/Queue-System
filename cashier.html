@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DPWH - Cashier</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/cashier.css" />
+  <link rel="icon" type="image/jpeg" href="logo.jpg">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #fff;
+      height: 100vh;
+      display: flex;
+    }
+
+    .container {
+      display: flex;
+      width: 100%;
+    }
+
+    .left-panel,
+    .right-panel {
+      padding: 60px;
+    }
+
+    .left-panel {
+      width: 50%;
+      border-right: 2px solid #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .right-panel {
+      width: 50%;
+      background: #f9f9f9;
+      overflow-y: auto;
+    }
+
+    .logo {
+      position: absolute;
+      top: 30px;
+      left: 40px;
+      width: 90px;
+    }
+
+    .cashier-title {
+      font-size: 40px;
+      font-weight: 700;
+      margin-bottom: 25px;
+    }
+
+    .divider {
+      width: 80%;
+      height: 3px;
+      background-color: #000;
+      margin: 10px 0 40px 0;
+    }
+
+    .currently-inline {
+      font-size: 24px;
+      font-weight: 600;
+      color: #3900b0;
+      margin-bottom: 20px;
+    }
+
+    .ticket-number {
+      font-size: 100px;
+      font-weight: bold;
+      margin-bottom: 50px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      font-size: 22px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      height: 70px;
+    }
+
+    .btn-blue {
+      background-color: #0047b3;
+      color: white;
+    }
+
+    .btn-red {
+      background-color: #da471f;
+      color: white;
+    }
+
+    .next-btn {
+      width: 80%;
+      margin-bottom: 25px;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: space-between;
+      width: 80%;
+      gap: 20px;
+    }
+
+    .half-btn {
+      width: 50%;
+    }
+
+    .btn i {
+      font-size: 22px;
+    }
+
+    .on-queue-title {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .queue-list {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      padding: 0 20px;
+    }
+
+    .queue-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 25px 30px;
+      border-radius: 12px;
+      background-color: #eee;
+      font-size: 20px;
+    }
+
+    .queue-item.active {
+      background-color: #0047b3;
+      color: white;
+    }
+
+    .queue-item .label {
+      font-weight: 600;
+    }
+
+    .dots {
+      width: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 20px;
+      margin-right: 20px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #002f6c;
+    }
+
+    .queue-content {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .left-panel,
+      .right-panel {
+        width: 100%;
+        padding: 30px;
+      }
+
+      .next-btn,
+      .button-row {
+        width: 100%;
+      }
+
+      .button-row {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .half-btn {
+        width: 100%;
+      }
+    }
+  </style>
+
+</head>
+<!-- Replace inside body tag -->
+
+<body>
+  <img src="logo.jpg" alt="Logo" class="logo" />
+  <div class="container">
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+      <div class="cashier-title" id="cashier-title">Cashier</div>
+      <div class="divider"></div>
+      <div class="currently-inline">Currently Inline</div>
+      <div class="ticket-number" id="current-ticket">---</div>
+
+      <div class="button-row" style="margin-bottom: 25px;">
+        <button class="btn btn-blue half-btn" id="next-btn">
+          <i class="fas fa-forward"></i> Next
+        </button>
+        <button class="btn btn-red half-btn" id="undo-btn">
+          <i class="fas fa-undo"></i> Undo
+        </button>
+      </div>
+
+      <div class="button-row">
+        <button class="btn btn-blue half-btn" id="call-btn" onclick="document.getElementById('ringtone').play()">
+          <i class="fas fa-bullhorn"></i> Call
+        </button>
+        <button class="btn btn-red half-btn" id="skip-btn">
+          <i class="fas fa-forward-fast"></i> Skip
+        </button>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+      <div class="on-queue-title">On Queue</div>
+      <div class="queue-list" id="queue-list"></div>
+    </div>
+  </div>
+
+  <script src="js/cashier.js"></script>
+
+  <audio id="ringtone" src="sounds/ringtone.mp3" preload="auto"></audio>
+</body>
+
+</html>
